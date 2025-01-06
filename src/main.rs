@@ -5,7 +5,7 @@ fn find_bluetooth_keyboard() -> Option<String> {
     for path in evdev::enumerate() {
         if let Ok(device) = Device::open(path.0.as_path()) {
             if let Some(name) = device.name() {
-                if name.contains("Corne Keyboard") {
+                if name.contains("Keyboard") {
                     return Some(path.0.as_path().display().to_string());
                 }
             }
