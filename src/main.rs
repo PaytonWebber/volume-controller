@@ -1,5 +1,5 @@
 use evdev::{Device, InputEventKind, Key};
-use std::{io::Result, process::Command};
+use std::process::Command;
 
 fn find_bluetooth_keyboard() -> Option<String> {
     for path in evdev::enumerate() {
@@ -45,11 +45,32 @@ fn change_volume(action: &str) {
     }
 }
 
-fn main() -> Result<()> {
-    let path = find_bluetooth_keyboard().unwrap();
-    let mut keyboard = Device::open(path)?;
+fn main() {
+    let path = match find_bluetooth_keyboard() {
+        Some(path) => path,
+        None => {
+            eprint!("Keyboard not found.");
+            return;
+        }
+    };
+    println!("Path found: {}", path);
+    let mut keyboard = match Device::open(path) {
+        Ok(device) => device,
+        Err(e) => {
+            eprintln!("{}", e);
+            return;
+        }
+    };
+    println!("Device created");
     loop {
-        for ev in keyboard.fetch_events()? {
+        let events = match keyboard.fetch_events() {
+            Ok(events) => events,
+            Err(e) => {
+                eprintln!("{}", e);
+                return;
+            }
+        };
+        for ev in events {
             if ev.value() == 0 {
                 continue;
             }
