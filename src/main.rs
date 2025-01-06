@@ -34,9 +34,9 @@ fn get_volume() -> String {
 fn change_volume(action: &str) {
     let volume = get_volume();
     let volume_command = match action {
-        "up" => &format!("pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -u low -t 1500 'Volume: {}% 🔊'", volume),
-        "down" => &format!("pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-send -u low -t 1500 'Volume: {}% 🔊'", volume),
-        "mute" => "pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -u low -t 1500 'Volume: Muted 🔇'",
+        "up" => &format!("pactl set-sink-volume @DEFAULT_SINK@ +5% && notify-send -r 1234 -u low 'Volume: {}% 🔊'", volume),
+        "down" => &format!("pactl set-sink-volume @DEFAULT_SINK@ -5% && notify-send -r 1234 -u low 'Volume: {}% 🔊'", volume),
+        "mute" => "pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -r 1234 -u low 'Volume: Muted 🔇'",
         _ => return,
     };
 
